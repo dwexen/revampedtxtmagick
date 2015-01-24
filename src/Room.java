@@ -17,7 +17,7 @@ public class Room
     private Location playerLocation;
     private Battle battle;
     private Player player;
-    
+    //changes
     public Battle getBattle() { return battle; }
     
     public Location getPlayerLocation() { return playerLocation; }
