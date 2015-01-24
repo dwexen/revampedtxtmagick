@@ -54,7 +54,7 @@ public abstract class Weapon implements Item
     }
     
     public abstract int attack(Character attacker, Character defender);
-    
+
     public void use()
     {
         

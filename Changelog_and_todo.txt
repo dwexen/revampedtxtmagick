@@ -5,3 +5,9 @@ Changelog:
 
 TODO:
 -Remake player action function to not suck
+-Add ranged weapon abstract or interface
+-Make equiptable interface
+-Add data structure to Room object to hold ground items
+-Add data structure to Character to hold equiped items/worn items
+
+-Move (direction) instead of move *enter* direction *enter*
