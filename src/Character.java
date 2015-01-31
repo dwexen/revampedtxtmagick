@@ -5,6 +5,8 @@
  * DAN w/ minor additons by others (but still mostly Dan)
  */
 import java.util.ArrayList;
+import java.util.Iterator;
+
 public class Character
 {
     protected Weapon myWeapon = null;
@@ -51,12 +53,7 @@ public class Character
         myLocation = loc;
     }
     
-    
-    public void changeMaxHealth(Armor a)
-    {
-        maxHealth += a.getHealthBoost();
-    }
-    
+
     public void changeHealth(double myHealth)
     {
         health = myHealth;
@@ -68,7 +65,19 @@ public class Character
     {
         stam += a.getStamBoost();
     }
-    
+
+    public void changeArmorStats(Armor a){
+        changeAtk(a);
+        changeStr(a);
+        changeDef(a);
+        changeDef(a);
+
+    }
+    public void changeMaxHealth(Armor a)
+    {
+        maxHealth += a.getHealthBoost();
+    }
+
     public void changeStr(Armor a)
     {
         str += a.getStrBoost();
@@ -161,52 +170,23 @@ public class Character
             String d = e.getDesc();
             if(d.equalsIgnoreCase("cold") && e.getActingOT())
             {
-                if(statusEffects != null)
-                {
-                    for(String effect: statusEffects)
-                    {
-                        if(effect.equalsIgnoreCase("wet"))
-                        {
-                            statusEffects.remove(effect);
-                            statusEffects.add("frozen");
-                        }
-                        else
-                            statusEffects.add("Slowed");
-                    }
-                }
+               replaceEffect("wet","frozen");
+                statusEffect("Slowed");
             }
             else if(d.equalsIgnoreCase("fire") && e.getActingOT())
             {
-                if(statusEffects != null)
-                {
-                    for(String effect: statusEffects)
-                    {
-                        if(effect.equalsIgnoreCase("wet"))
-                        {
-                            statusEffects.remove(effect);
-                        
-                        }
-                        else
-                            statusEffects.add("Burning");
-                    }
-                }
+                removeEffect("fire");
+                statusEffect("Burning");
             }
             else if(d.equalsIgnoreCase("earth") && e.getActingOT())
             {
-                statusEffects.add("Knocked down");
+                statusEffect("Knocked down");
             }
             else if(d.equalsIgnoreCase("water") && e.getActingOT())
             {
-                for(String effect: statusEffects)
-                {
-                    if(effect.equalsIgnoreCase("burning"))
-                    {
-                        statusEffects.remove(effect);
-                       
-                    }
-                    else
-                        statusEffects.add("wet");
-                }
+                removeEffect("burning");
+                statusEffect("wet");
+
             }
             else if(d.equalsIgnoreCase("shield") && e.getActingOT())
             {
@@ -254,5 +234,31 @@ public class Character
            
         myLocation.setLocation(x, y);
         getCurrentRoom().setObjectAtLocation(x, y, this);
+    }
+
+    private boolean removeEffect(String effect){
+        return replaceEffect(effect,null);
+    }
+
+    private boolean replaceEffect(String effect, String replacement){
+            boolean removed = false;
+        if(statusEffects != null && statusEffects.size() > 0){
+            Iterator<String> it = statusEffects.iterator();
+            String statusEffect;
+
+            while(it.hasNext()){
+                statusEffect = it.next();
+                if(statusEffect.equalsIgnoreCase(effect)){
+                    it.remove();
+                    if(!removed) {
+                        removed = !removed;
+                        if(replacement != null)
+                            statusEffects.add(replacement);
+                    }
+
+                }
+            }
+        }
+        return removed;
     }
 }
